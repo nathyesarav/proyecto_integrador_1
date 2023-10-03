@@ -5,7 +5,7 @@ data_games = pd.read_csv("db/data_games.csv")
 data_games_wr = pd.read_csv("db/data_games_wr.csv")
 data_players = pd.read_csv("db/data_players.csv")
 data_reviews = pd.read_csv("db/data_reviews.csv")
-item_similarity_df = pd.read_csv("db/item_similarity_df.csv")
+item_similarity = pd.read_csv("db/item_similarity.csv")
 
 def PlayTimeGenre(genre: str):
     if genre in data_games.columns:
@@ -70,8 +70,9 @@ def sentiment_analysis(year: int):
         return 0
     
 def recomendacion_juego(id: int):
-    if id in data_games_wr['id'].values:
+    if id in data_games['id'].values:
         top_value = 5
+        item_similarity_df = pd.DataFrame(item_similarity, index=data_games['id'], columns=data_games['id'])
         similar_items = item_similarity_df[id]
         similar_items = similar_items.sort_values(ascending=False)
         response = similar_items.drop(id).head(top_value).index.to_list()
