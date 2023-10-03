@@ -1,4 +1,5 @@
 import pandas as pd
+from sklearn.metrics.pairwise import cosine_similarity
 
 # Importamos los DF de los CSV
 data_games = pd.read_csv("db/data_games.csv")
@@ -64,6 +65,19 @@ def sentiment_analysis(year: int):
         else:
             pos = 0
         response = {"Negative = " + str(neg), "Neutral = " + str(neutr), "Positive = " + str(pos)}
+        return response
+    else:
+        return 0
+    
+def recomendacion_juego(id: int):
+    if id in data_games_wr['id'].values:
+        top_value = 5
+        ItemUser = data_games.drop(columns=['genres', 'title', 'specs', 'price', 'early_access', 'metascore', 'year', 'playtime_forever'])
+        item_similarity = cosine_similarity(ItemUser)
+        item_similarity_df = pd.DataFrame(item_similarity, index=ItemUser.index, columns=ItemUser.index)
+        similar_items = item_similarity_df[id]
+        similar_items = similar_items.sort_values(ascending=False)
+        response = similar_items.drop(id).head(top_value).index.to_list()
         return response
     else:
         return 0

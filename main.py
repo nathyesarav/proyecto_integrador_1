@@ -52,3 +52,10 @@ def read_user(year:int):
     if data == 0:
         raise HTTPException(status_code=400, detail="Error, Año no encontrado!")
     return str(data)
+
+@app.get("/recomendacion_juego/{id}")
+def read_user(id:int):
+    data = api.recomendacion_juego(id)
+    if data == 0:
+        raise HTTPException(status_code=400, detail="Error, Id no encontrado!")
+    return str(data)
